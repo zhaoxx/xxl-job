@@ -138,7 +138,8 @@
 								</#list>
                             </select>
                         </div>
-                        <label for="firstname" class="col-sm-2 control-label">JobHandler<font color="black">*</font></label>
+                        <label for="firstname" class="col-sm-2 control-label" id="JobHandler" style="display: block;">JobHandler<font color="black">*</font></label>
+                        <label for="firstname" class="col-sm-2 control-label" id="url" style="display: none;">url<font color="red">*</font></label>
                         <div class="col-sm-4"><input type="text" class="form-control" name="executorHandler" placeholder="请输入“JobHandler”" maxlength="100" ></div>
                     </div>
                     <div class="form-group">
@@ -282,7 +283,8 @@ logging.info("脚本文件：" + sys.argv[0])
 							</#list>
                             </select>
                         </div>
-                        <label for="firstname" class="col-sm-2 control-label">JobHandler<font color="black">*</font></label>
+                        <label for="firstname" class="col-sm-2 control-label" id="JobHandler" style="display: block;">JobHandler<font color="black">*</font></label>
+                        <label for="firstname" class="col-sm-2 control-label" id="url" style="display: none;">url<font color="red">*</font></label>
                         <div class="col-sm-4"><input type="text" class="form-control" name="executorHandler" placeholder="请输入“JobHandler”" maxlength="100" ></div>
                     </div>
                     <div class="form-group">

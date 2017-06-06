@@ -1,5 +1,10 @@
 package com.xxl.job.core.biz.impl;
 
+import java.util.Date;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.xxl.job.core.biz.ExecutorBiz;
 import com.xxl.job.core.biz.model.LogResult;
 import com.xxl.job.core.biz.model.ReturnT;
@@ -10,13 +15,10 @@ import com.xxl.job.core.glue.GlueFactory;
 import com.xxl.job.core.glue.GlueTypeEnum;
 import com.xxl.job.core.handler.IJobHandler;
 import com.xxl.job.core.handler.impl.GlueJobHandler;
+import com.xxl.job.core.handler.impl.HttpJobHandler;
 import com.xxl.job.core.handler.impl.ScriptJobHandler;
 import com.xxl.job.core.log.XxlJobFileAppender;
 import com.xxl.job.core.thread.JobThread;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.Date;
 
 /**
  * Created by xuxueli on 17/3/1.
@@ -118,7 +120,25 @@ public class ExecutorBizImpl implements ExecutorBiz {
             if (jobHandler == null) {
                 jobHandler = new ScriptJobHandler(triggerParam.getJobId(), triggerParam.getGlueUpdatetime(), triggerParam.getGlueSource(), GlueTypeEnum.match(triggerParam.getGlueType()));
             }
-        } else {
+        } else if (GlueTypeEnum.HTTP==GlueTypeEnum.match(triggerParam.getGlueType())) {
+        	//TODO HTTP模式
+        	
+        	// valid old jobThread
+            if (jobThread != null &&
+                    !(jobThread.getHandler() instanceof HttpJobHandler
+                            && ((HttpJobHandler) jobThread.getHandler()).getGlueUpdatetime()==triggerParam.getGlueUpdatetime() )) {
+                // change script or gluesource updated, need kill old thread
+                removeOldReason = "更新任务逻辑或更换任务模式,终止旧任务线程";
+
+                jobThread = null;
+                jobHandler = null;
+            }
+        	
+        	// valid handler
+            if (jobHandler == null) {
+                jobHandler = new HttpJobHandler(triggerParam.getGlueUpdatetime(), triggerParam.getExecutorHandler());
+            }
+        }else {
             return new ReturnT<String>(ReturnT.FAIL_CODE, "glueType[" + triggerParam.getGlueType() + "] is not valid.");
         }
 

@@ -8,3 +8,6 @@
 */target
 .DS_Store
 .gitattributes
+*/.settings
+*/.project
+*/.classpath

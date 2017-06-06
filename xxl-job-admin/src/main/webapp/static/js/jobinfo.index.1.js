@@ -57,6 +57,8 @@ $(function() {
 								return "GLUE模式(Python)";
 							} else if ('BEAN'==row.glueType) {
 								return "BEAN模式：" + row.executorHandler;
+							} else if ('HTTP'==row.glueType) {
+								return "HTTP模式：" + row.executorHandler;
 							}
 							return row.executorHandler;
 						}
@@ -316,12 +318,27 @@ $(function() {
     $(".glueType").change(function(){
 		// executorHandler
         var $executorHandler = $(this).parents("form").find("input[name='executorHandler']");
+        var $urlLablel = $(this).parents("form").find("label[id='url']");
+        var $JobHandlerLabel = $(this).parents("form").find("label[id='JobHandler']");
         var glueType = $(this).val();
-        if ('BEAN' != glueType) {
+        if ('BEAN' != glueType && 'HTTP' != glueType) {
+        	$urlLablel.hide();
+        	$JobHandlerLabel.show();
             $executorHandler.val("");
             $executorHandler.attr("readonly","readonly");
         } else {
             $executorHandler.removeAttr("readonly");
+            if('HTTP' == glueType){
+            	//'HTTP'
+            	$JobHandlerLabel.hide();
+            	$urlLablel.show();
+            	$executorHandler.attr('placeholder','请输入“url”');
+            }else{
+            	//'BEAN'
+            	$urlLablel.hide();
+            	$JobHandlerLabel.show();
+            	$executorHandler.attr('placeholder','请输入“JobHandler”');
+            }
         }
     });
 

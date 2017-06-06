@@ -123,6 +123,8 @@ $(function() {
 								return "GLUE模式(Python)";
 							} else if ('BEAN'==row.glueType) {
 								return "BEAN模式：" + row.executorHandler;
+							} else if ('HTTP'==row.glueType) {
+								return "HTTP模式：" + row.executorHandler;
 							}
 							return row.executorHandler;
 						}

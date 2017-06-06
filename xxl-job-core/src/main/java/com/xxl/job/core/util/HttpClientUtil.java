@@ -1,20 +1,23 @@
 package com.xxl.job.core.util;
 
+import java.io.IOException;
+import java.io.InputStream;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.ContentType;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.eclipse.jetty.http.HttpMethod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * httpclient util
@@ -23,6 +26,41 @@ import java.io.InputStream;
 public class HttpClientUtil {
 	private static Logger logger = LoggerFactory.getLogger(HttpClientUtil.class);
 
+	public static HttpResponse getRequest(String reqURL) throws Exception {
+		HttpResponse response = null;
+		
+		HttpGet httpGet = new HttpGet(reqURL);
+		CloseableHttpClient httpClient = HttpClients.createDefault();
+		try{
+			// timeout
+			RequestConfig requestConfig = RequestConfig.custom()
+                    .setConnectionRequestTimeout(10000)
+                    .setSocketTimeout(10000)
+                    .setConnectTimeout(10000)
+                    .build();
+			httpGet.setConfig(requestConfig);
+			
+			// do get
+			response = httpClient.execute(httpGet);
+//			HttpEntity entity = response.getEntity();
+//			if (null != entity) {
+//				responseBytes = EntityUtils.toByteArray(entity);
+//				EntityUtils.consume(entity);
+//			}
+		}catch (Exception e){
+			logger.error("", e);
+			throw e;
+		} finally {
+			httpGet.releaseConnection();
+			try {
+				httpClient.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return response;
+	}
+	
 	/**
 	 * post request
 	 */

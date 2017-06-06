@@ -13,7 +13,9 @@ import com.xxl.job.core.biz.model.ReturnT;
 import com.xxl.job.core.biz.model.TriggerParam;
 import com.xxl.job.core.enums.ExecutorBlockStrategyEnum;
 import com.xxl.job.core.enums.RegistryConfig;
+import com.xxl.job.core.glue.GlueTypeEnum;
 import com.xxl.job.core.rpc.netcom.NetComClientProxy;
+
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.quartz.JobExecutionContext;
@@ -93,7 +95,7 @@ public class RemoteHttpJobBean extends QuartzJobBean {
 
     public ReturnT<String> doTrigger(TriggerParam triggerParam, XxlJobInfo jobInfo, XxlJobLog jobLog){
 		StringBuffer triggerSb = new StringBuffer();
-
+		
 		// exerutor address list
 		ArrayList<String> addressList = null;
 		XxlJobGroup group = XxlJobDynamicScheduler.xxlJobGroupDao.load(jobInfo.getJobGroup());
